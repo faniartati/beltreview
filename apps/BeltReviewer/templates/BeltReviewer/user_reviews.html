@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Book Reviews</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'BeltReviewer/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static 'BeltReviewer/css/belt_reviewer.css' %}">
+  </head>
+  <body>
+    <div id="header">
+      <h3>Welcome, {{request.session.user_alias}}!</h3>
+      <div id="header_nav">
+        <ul>
+          <li><a href="/add_book_review">Add Book and Review</a></li>
+          <li><a href="/logout">Logout</a></li>
+        </ul>
+      </div>
+    </div>
+    <div id="recent_reviews">
+      <p class="heading">Recent Book Reviews:</p>
+      {% for review in recent_reviews %}
+        <div class="reviews">
+          <a href="/books/{{review.book.id}}">{{review.book.title}}</a><br>
+          Rating:
+          {% load my_filters %}
+          {% for i in review.rating|times %}
+              <i class="fa fa-star orange" aria-hidden="true"></i>
+          {% endfor %}
+          {% for i in review.rating|deltatofive %}
+              <i class="fa fa-star grey" aria-hidden="true"></i>
+          {% endfor %}
+          <br>
+          <a href="/users/{{review.user.id}}">{{review.user.alias}}</a> <span class="footnote"> says: {{review.review}}</span>
+          <br><br>
+          <span class="footnote">Posted on {{review.created_at}}</span>
+        </div>
+      {% endfor %}
+      </div>
+    </div>
+    <div id="other_books">
+      <p class="heading">Other Books with Reviews:</p>
+      <div id="book_list">
+        <ul>
+          {% for book in other_books %}
+          <li><a href="/books/{{book.id}}">{{book.title}}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>
